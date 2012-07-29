@@ -1,7 +1,6 @@
-package com.sksamuel.jda.camel.couch;
+package com.sksamuel.camel.couchdb;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
@@ -13,17 +12,17 @@ import org.slf4j.LoggerFactory;
  * @author Stephen K Samuel samspade79@gmail.com 21 May 2012 07:05:49
  * 
  */
-public class CouchConsumer extends DefaultConsumer {
+public class CouchDbConsumer extends DefaultConsumer {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchConsumer.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbConsumer.class);
 
 	private final Processor		processor;
 	private final CouchDbClient	couchClient;
-	private final CouchEndpoint	endpoint;
+	private final CouchDbEndpoint	endpoint;
 	private ExecutorService		executor;
-	private CouchChangesTracker	task;
+	private CouchDbChangesetTracker	task;
 
-	public CouchConsumer(CouchDbClient couchClient, CouchEndpoint endpoint, Processor processor) {
+	public CouchDbConsumer(CouchDbEndpoint endpoint, CouchDbClient couchClient, Processor processor) {
 		super(endpoint, processor);
 		this.couchClient = couchClient;
 		this.endpoint = endpoint;
@@ -34,7 +33,7 @@ public class CouchConsumer extends DefaultConsumer {
 	protected void doStart() throws Exception {
 		super.doStart();
 		executor = endpoint.getCamelContext().getExecutorServiceManager().newFixedThreadPool(this, endpoint.getEndpointUri(), 1);
-		task = new CouchChangesTracker(endpoint, this, couchClient);
+		task = new CouchDbChangesetTracker(endpoint, this, couchClient);
 		executor.submit(task);
 	}
 
@@ -45,12 +44,24 @@ public class CouchConsumer extends DefaultConsumer {
 			task.stop();
 		}
 		if (executor != null) {
-			executor.shutdown();
-			executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
 			if (!executor.isShutdown()) {
 				executor.shutdownNow();
 			}
 			executor = null;
 		}
+	}
+
+	@Override
+	public void resume() throws Exception {
+		super.resume();
+		doStart();
+	}
+
+	@Override
+	public void suspend() throws Exception {
+		super.suspend();
+		// suspend can do a stop as couch is a stateless protocol. There is no overload to be saved by maintaining a
+		// "connection"
+		doStop();
 	}
 }

@@ -1,4 +1,4 @@
-package com.sksamuel.jda.camel.couch;
+package com.sksamuel.camel.couchdb;
 
 import org.apache.camel.Exchange;
 import org.lightcouch.Changes;
@@ -14,11 +14,9 @@ import com.google.gson.JsonObject;
  * @author Stephen K Samuel samspade79@gmail.com 29 Jul 2012 13:29:38
  * 
  */
-public class CouchChangesTracker implements Runnable {
+public class CouchDbChangesetTracker implements Runnable {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchChangesTracker.class);
-
-	private volatile boolean	run		= true;
+	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbChangesetTracker.class);
 
 	private volatile boolean	stopped;
 
@@ -26,11 +24,11 @@ public class CouchChangesTracker implements Runnable {
 
 	private Changes			changes;
 
-	private final CouchEndpoint	endpoint;
+	private final CouchDbEndpoint	endpoint;
 
-	private final CouchConsumer	consumer;
+	private final CouchDbConsumer	consumer;
 
-	public CouchChangesTracker(CouchEndpoint endpoint, CouchConsumer consumer, CouchDbClient couchClient) {
+	public CouchDbChangesetTracker(CouchDbEndpoint endpoint, CouchDbConsumer consumer, CouchDbClient couchClient) {
 		this.endpoint = endpoint;
 		this.consumer = consumer;
 		this.couchClient = couchClient;
@@ -44,6 +42,10 @@ public class CouchChangesTracker implements Runnable {
 		changes = couchClient.changes().includeDocs(true).since(since).heartBeat(endpoint.getHeartbeart()).continuousChanges();
 	}
 
+	public boolean isStopped() {
+		return stopped;
+	}
+
 	@Override
 	public void run() {
 		while (changes.hasNext()) { // blocks until a feed is received
@@ -53,7 +55,7 @@ public class CouchChangesTracker implements Runnable {
 
 			try {
 
-				Exchange exchange = endpoint.createCouchExchange(doc.toString());
+				Exchange exchange = endpoint.createCouchExchange(doc);
 				logger.trace("Sending exchange: {}, _id: {}", exchange, doc.get("_id"));
 				consumer.getProcessor().process(exchange);
 
@@ -65,8 +67,5 @@ public class CouchChangesTracker implements Runnable {
 
 	public void stop() {
 		changes.stop();
-		while (!stopped) {
-			logger.info("Couch consuming thread shutdown");
-		}
 	}
 }
