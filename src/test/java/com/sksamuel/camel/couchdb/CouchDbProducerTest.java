@@ -10,7 +10,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.util.UUID;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.InvalidPayloadException;
 import org.apache.camel.Message;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,10 +42,16 @@ public class CouchDbProducerTest {
 	private CouchDbProducer		producer;
 
 	@Before
-	public void before() throws InvalidPayloadException {
+	public void before() {
 		initMocks(this);
 		producer = new CouchDbProducer(endpoint, client);
 		when(exchange.getIn()).thenReturn(msg);
+	}
+
+	@Test(expected = CouchDbException.class)
+	public void testBodyMandatory() throws Exception {
+		when(msg.getMandatoryBody()).thenReturn(null);
+		producer.process(exchange);
 	}
 
 	@Test
@@ -69,6 +74,12 @@ public class CouchDbProducerTest {
 		producer.process(exchange);
 		verify(msg).setHeader(CouchDbEndpoint.HEADER_DOC_ID, id);
 		verify(msg).setHeader(CouchDbEndpoint.HEADER_DOC_REV, rev);
+	}
+
+	@Test(expected = CouchDbException.class)
+	public void testNullSaveResponseThrowsError() throws Exception {
+		when(client.save(anyObject())).thenReturn(null);
+		producer.process(exchange);
 	}
 
 	@Test

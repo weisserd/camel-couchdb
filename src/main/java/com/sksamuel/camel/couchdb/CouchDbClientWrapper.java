@@ -8,6 +8,8 @@ import org.lightcouch.Response;
 /**
  * @author Stephen K Samuel samspade79@gmail.com 29 Jul 2012 16:28:38
  * 
+ *         Necessary to allow mockito to mock this client.
+ * 
  */
 public class CouchDbClientWrapper {
 
