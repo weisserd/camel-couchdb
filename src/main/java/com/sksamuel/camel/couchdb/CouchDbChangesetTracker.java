@@ -38,7 +38,8 @@ public class CouchDbChangesetTracker implements Runnable {
 		CouchDbInfo dbInfo = couchClient.context().info();
 		String since = dbInfo.getUpdateSeq(); // get latest update seq
 		logger.debug("Last sequence [{}]", since);
-		changes = couchClient.changes().includeDocs(true).since(since).heartBeat(endpoint.getHeartbeat()).continuousChanges();
+		changes = couchClient.changes().style(endpoint.getStyle()).includeDocs(true).since(since).heartBeat(endpoint.getHeartbeat())
+				.continuousChanges();
 	}
 
 	public boolean isStopped() {

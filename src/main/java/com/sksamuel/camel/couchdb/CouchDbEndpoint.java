@@ -27,6 +27,8 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 	public static final String	HEADER_DOC_REV	= "CouchDbRev";
 
 	private static final String	URI_ERROR		= "Invalid URI. Format must be of the form couchdb:http[s]://hostname[:port]/database?[options...]";
+
+	static final String		DEFAULT_STYLE	= "main_only";
 	static final long			DEFAULT_HEARTBEAT	= 30000;
 	static final int			DEFAULT_PORT	= 5984;
 
@@ -34,13 +36,15 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	private final String		hostname;
 
+	private String			style			= DEFAULT_STYLE;
+
 	private String			username;
 
 	private final String		database;
 
 	private String			password;
 
-	private final int				port;
+	private final int			port;
 
 	private long			heartbeat		= DEFAULT_HEARTBEAT;
 
@@ -64,30 +68,6 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		hostname = uri.getHost();
 		if (hostname == null)
 			throw new CouchDbException(URI_ERROR);
-	}
-
-	public String getProtocol() {
-		return protocol;
-	}
-
-	public String getHostname() {
-		return hostname;
-	}
-
-	public String getDatabase() {
-		return database;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public boolean isCreateDatabase() {
-		return createDatabase;
 	}
 
 	CouchDbClientWrapper createClient() {
@@ -119,12 +99,40 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return new CouchDbProducer(this, createClient());
 	}
 
+	public String getDatabase() {
+		return database;
+	}
+
 	public long getHeartbeat() {
 		return heartbeat;
 	}
 
+	public String getHostname() {
+		return hostname;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
 	public int getPort() {
 		return port;
+	}
+
+	public String getProtocol() {
+		return protocol;
+	}
+
+	public String getStyle() {
+		return style;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public boolean isCreateDatabase() {
+		return createDatabase;
 	}
 
 	@Override
@@ -142,6 +150,10 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
 	}
 
 	public void setUsername(String username) {

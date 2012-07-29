@@ -67,6 +67,7 @@ public class CouchDbChangesetTrackerTest {
 		when(changes.includeDocs(true)).thenReturn(changes);
 		when(changes.since(anyString())).thenReturn(changes);
 		when(changes.heartBeat(anyLong())).thenReturn(changes);
+		when(changes.style(anyString())).thenReturn(changes);
 
 		when(row1.getSeq()).thenReturn("seq1");
 		when(row2.getSeq()).thenReturn("seq2");

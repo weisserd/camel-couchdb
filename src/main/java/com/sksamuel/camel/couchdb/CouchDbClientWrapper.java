@@ -20,6 +20,10 @@ public class CouchDbClientWrapper {
 		this.client = client;
 	}
 
+	public Response update(Object doc) {
+		return client.update(doc);
+	}
+
 	public Response save(Object doc) {
 		return client.save(doc);
 	}

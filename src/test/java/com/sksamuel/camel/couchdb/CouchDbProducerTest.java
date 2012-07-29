@@ -69,7 +69,7 @@ public class CouchDbProducerTest {
 		doc.addProperty("_rev", rev);
 
 		when(msg.getMandatoryBody()).thenReturn(doc);
-		when(client.save(doc)).thenReturn(response);
+		when(client.update(doc)).thenReturn(response);
 
 		producer.process(exchange);
 		verify(msg).setHeader(CouchDbEndpoint.HEADER_DOC_ID, id);

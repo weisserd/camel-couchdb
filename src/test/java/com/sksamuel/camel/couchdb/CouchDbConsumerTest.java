@@ -89,6 +89,7 @@ public class CouchDbConsumerTest extends CamelTestSupport {
 
 		when(client.changes()).thenReturn(changes);
 		when(changes.continuousChanges()).thenReturn(changes);
+		when(changes.style(anyString())).thenReturn(changes);
 		when(changes.includeDocs(true)).thenReturn(changes);
 		when(changes.since(anyString())).thenReturn(changes);
 		when(changes.heartBeat(anyLong())).thenReturn(changes);

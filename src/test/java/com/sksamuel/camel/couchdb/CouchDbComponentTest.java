@@ -42,6 +42,7 @@ public class CouchDbComponentTest {
 		params.put("username", "coldplay");
 		params.put("password", "chrism");
 		params.put("heartbeat", 1000);
+		params.put("style", "gothic");
 
 		String uri = "couchdb:http://localhost:14/db";
 		String remaining = "http://localhost:14/db";
@@ -51,6 +52,7 @@ public class CouchDbComponentTest {
 		assertEquals("localhost", endpoint.getHostname());
 		assertEquals("db", endpoint.getDatabase());
 		assertEquals("coldplay", endpoint.getUsername());
+		assertEquals("gothic", endpoint.getStyle());
 		assertEquals("chrism", endpoint.getPassword());
 		assertTrue(endpoint.isCreateDatabase());
 		assertEquals(14, endpoint.getPort());
