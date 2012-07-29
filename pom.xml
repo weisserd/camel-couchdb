@@ -5,7 +5,7 @@
 
 	<groupId>com.sksamuel</groupId>
 	<artifactId>camel-couchdb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>true</version>
 	<packaging>jar</packaging>
 
 	<properties>
