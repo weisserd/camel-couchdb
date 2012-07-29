@@ -9,7 +9,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
@@ -113,13 +117,14 @@ public class CouchDbConsumerTest extends CamelTestSupport {
 	}
 
 	@Test
-	public void test100VirtualMessages() throws Exception {
-		to.expectedMessageCount(100);
+	public void test1000VirtualMessages() throws Exception {
+		// just test that the messages are passed on into the final endpoint ok
+		to.expectedMessageCount(1000);
 		Thread t = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				for (int i = 1; i <= 100; i++) {
+				for (int i = 1; i <= 1000; i++) {
 					template.sendBody("test");
 				}
 			}
@@ -128,12 +133,6 @@ public class CouchDbConsumerTest extends CamelTestSupport {
 		t.start();
 		t.join();
 		to.assertIsSatisfied();
-	}
-
-	@Test
-	public void testTrackingTaskIsSubmitted() throws Exception {
-		consumer.doStart();
-		verify(executor).submit(any(Runnable.class));
 	}
 
 	@Test
@@ -147,5 +146,35 @@ public class CouchDbConsumerTest extends CamelTestSupport {
 		// 2nd invocation should have no effect
 		consumer.doStop();
 		verify(executor).shutdownNow();
+	}
+
+	@Test
+	public void testStopInterruptsExecutor() throws Exception {
+		ExecutorService realexe = Executors.newSingleThreadExecutor();
+		Future future = realexe.submit(new Runnable() {
+
+			@Override
+			public void run() {
+				BlockingQueue queue = new ArrayBlockingQueue(10);
+				try {
+					queue.take();
+					fail("We were not interrupted");
+				} catch (InterruptedException e) {
+				}
+			}
+
+		});
+		when(manager.newFixedThreadPool(any(CouchDbConsumer.class), anyString(), anyInt())).thenReturn(realexe);
+		consumer.doStart();
+		consumer.doStop();
+		future.get();
+		assertTrue(realexe.isShutdown());
+		assertTrue(realexe.isTerminated());
+	}
+
+	@Test
+	public void testTrackingTaskIsSubmitted() throws Exception {
+		consumer.doStart();
+		verify(executor).submit(any(Runnable.class));
 	}
 }
