@@ -12,8 +12,28 @@ The camel-couchdb component allows you to treat Apache CouchDB as a producer or 
 How to Use
 ==========
 
-You can use couch as an endpoint with the following syntax. The endpoint syntax is the same for producer and consumer.
+You can use couch as an endpoint with the following URI. The endpoint URI is the same for producer and consumer.
 `couchdb:http://hostname[:port]/database?[options...]`
+
+Some of the available options are:
+
+* _deletes_ document deletes are published as events (default true)
+* _updates_ document inserts/updates are published as events (default true)
+* _heartbeat_ how often to send an empty message to keep socket alive (default 30000ms)
+* _createDatabase_ create the database if it does not already exist (default false)
+* _username_ username in case of authenticated databases (default null)
+* _password_ password for authenticated databases (default null)
+
+Meta Data
+=========
+
+Messages published into the system have the following metadata applied in the form of headers on the exchange:
+
+* CouchDbDatabase - the database the message came from
+* CouchDbSeq - the couchdb changeset sequence number of the update / delete message
+* CouchDbId - the couchdb document id
+* CouchDbRev - the couchdb document revision
+* CouchDbMethod - the method (delete / update)
 
 Tests
 =====
