@@ -30,17 +30,17 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 	static final long			DEFAULT_HEARTBEAT	= 30000;
 	static final int			DEFAULT_PORT	= 5984;
 
-	private String			protocol;
+	private final String		protocol;
 
-	private String			hostname;
+	private final String		hostname;
 
 	private String			username;
 
-	private String			database;
+	private final String		database;
 
 	private String			password;
 
-	private int				port;
+	private final int				port;
 
 	private long			heartbeat		= DEFAULT_HEARTBEAT;
 
@@ -70,24 +70,12 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return protocol;
 	}
 
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
-
 	public String getHostname() {
 		return hostname;
 	}
 
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
-
 	public String getDatabase() {
 		return database;
-	}
-
-	public void setDatabase(String database) {
-		this.database = database;
 	}
 
 	public String getUsername() {
@@ -100,10 +88,6 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	public boolean isCreateDatabase() {
 		return createDatabase;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
 	}
 
 	CouchDbClientWrapper createClient() {

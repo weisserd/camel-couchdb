@@ -6,14 +6,6 @@ package com.sksamuel.camel.couchdb;
  */
 public class CouchDbException extends RuntimeException {
 
-	public CouchDbException() {
-		super();
-	}
-
-	public CouchDbException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public CouchDbException(String message) {
 		super(message);
 	}
