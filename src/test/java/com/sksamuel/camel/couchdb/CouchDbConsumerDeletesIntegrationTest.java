@@ -18,14 +18,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 /**
- * @author Stephen K Samuel samspade79@gmail.com 29 Jul 2012 18:09:05
+ * @author Stephen K Samuel samspade79@gmail.com 29 Jul 2012 18:57:57
  * 
  */
-public class CouchDbConsumerIntegrationTest extends CamelTestSupport {
+public class CouchDbConsumerDeletesIntegrationTest extends CamelTestSupport {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbConsumerIntegrationTest.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbConsumerDeletesIntegrationTest.class);
 
-	@EndpointInject(uri = "couchdb:http://localhost:5984/camelcouchdb?deletes=false")
+	@EndpointInject(uri = "couchdb:http://localhost:5984/camelcouchdb?updates=false")
 	private Endpoint			from;
 
 	@EndpointInject(uri = "mock:result")
@@ -50,37 +50,14 @@ public class CouchDbConsumerIntegrationTest extends CamelTestSupport {
 	}
 
 	@Test
-	public void testInsertsOnly() throws InterruptedException {
-		to.expectedHeaderReceived(CouchDbEndpoint.HEADER_METHOD, "UPDATE");
+	public void testDeletesOnly() throws InterruptedException {
+		to.expectedHeaderReceived(CouchDbEndpoint.HEADER_METHOD, "DELETE");
 		to.expectedMessageCount(1);
 
 		JsonElement obj = new Gson().toJsonTree("{ \"randomString\" : \"" + UUID.randomUUID() + "\" }");
 		Response resp = client.save(obj);
 		client.remove(resp.getId(), resp.getRev());
 
-		to.assertIsSatisfied();
-	}
-
-	@Test
-	public void testMessages() throws InterruptedException {
-		final int messageCount = 100;
-		to.expectedMessageCount(messageCount);
-
-		// insert json manually into couch, camel will
-		// then pick that up and send to mock endpoint
-		Thread t = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				for (int k = 0; k < messageCount; k++) {
-					JsonElement obj = new Gson().toJsonTree("{ \"randomString\" : \"" + UUID.randomUUID() + "\" }");
-					client.save(obj);
-				}
-			}
-		});
-
-		t.start();
-		t.join();
 		to.assertIsSatisfied();
 	}
 }

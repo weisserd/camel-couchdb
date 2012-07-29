@@ -29,10 +29,11 @@ public class CouchDbEndpointTest {
 		doc.addProperty("_id", id);
 		doc.addProperty("_rev", rev);
 
-		Exchange exchange = endpoint.createCouchExchange(seq, id, doc);
+		Exchange exchange = endpoint.createCouchExchange(seq, id, doc, false);
 		assertEquals(id, exchange.getIn().getHeader(CouchDbEndpoint.HEADER_DOC_ID));
 		assertEquals(rev, exchange.getIn().getHeader(CouchDbEndpoint.HEADER_DOC_REV));
 		assertEquals(seq, exchange.getIn().getHeader(CouchDbEndpoint.HEADER_SEQ));
+		assertEquals("UPDATE", exchange.getIn().getHeader(CouchDbEndpoint.HEADER_METHOD));
 		assertEquals("db", exchange.getIn().getHeader(CouchDbEndpoint.HEADER_DATABASE));
 
 	}

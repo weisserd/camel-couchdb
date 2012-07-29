@@ -25,6 +25,7 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 	public static final String	HEADER_SEQ		= "CouchDbSeq";
 	public static final String	HEADER_DOC_ID	= "CouchDbId";
 	public static final String	HEADER_DOC_REV	= "CouchDbRev";
+	public static final String	HEADER_METHOD	= "CouchDbMethod";
 
 	private static final String	URI_ERROR		= "Invalid URI. Format must be of the form couchdb:http[s]://hostname[:port]/database?[options...]";
 
@@ -83,7 +84,7 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return new CouchDbConsumer(this, createClient(), processor);
 	}
 
-	public Exchange createCouchExchange(String seq, String id, JsonObject obj) {
+	public Exchange createCouchExchange(String seq, String id, JsonObject obj, boolean deleted) {
 		Exchange exchange = new DefaultExchange(getCamelContext(), getExchangePattern());
 
 		Message message = new DefaultMessage();
@@ -91,6 +92,7 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		message.setHeader(HEADER_SEQ, seq);
 		message.setHeader(HEADER_DOC_ID, id);
 		message.setHeader(HEADER_DOC_REV, obj.get("_rev").getAsString());
+		message.setHeader(HEADER_METHOD, deleted ? "DELETE" : "UPDATE");
 
 		message.setBody(obj);
 		exchange.setIn(message);

@@ -92,9 +92,9 @@ public class CouchDbChangesetTrackerTest {
 
 		tracker.run();
 
-		verify(endpoint).createCouchExchange("seq1", "id1", null);
-		verify(endpoint).createCouchExchange("seq2", "id2", null);
-		verify(endpoint).createCouchExchange("seq3", "id3", null);
+		verify(endpoint).createCouchExchange("seq1", "id1", null, false);
+		verify(endpoint).createCouchExchange("seq2", "id2", null, false);
+		verify(endpoint).createCouchExchange("seq3", "id3", null, false);
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class CouchDbChangesetTrackerTest {
 
 		tracker.run();
 
-		verify(endpoint).createCouchExchange("seq1", "id1", null);
+		verify(endpoint).createCouchExchange("seq1", "id1", null, false);
 		verify(processor).process(any(Exchange.class));
 	}
 }
