@@ -42,7 +42,7 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	private int				port;
 
-	private long			heartbeart		= DEFAULT_HEARTBEAT;
+	private long			heartbeat		= DEFAULT_HEARTBEAT;
 
 	private boolean			createDatabase;
 
@@ -135,8 +135,8 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return new CouchDbProducer(this, createClient());
 	}
 
-	public long getHeartbeart() {
-		return heartbeart;
+	public long getHeartbeat() {
+		return heartbeat;
 	}
 
 	public int getPort() {
@@ -152,8 +152,8 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		this.createDatabase = create;
 	}
 
-	public void setHeartbeart(long heartbeart) {
-		this.heartbeart = heartbeart;
+	public void setHeartbeat(long heartbeart) {
+		this.heartbeat = heartbeart;
 	}
 
 	public void setPassword(String password) {
