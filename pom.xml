@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sksamuel</groupId>
-	<artifactId>camel-couch</artifactId>
+	<artifactId>camel-couchdb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -17,7 +17,6 @@
 		<maven.plugin.compiler.version>2.3.2</maven.plugin.compiler.version>
 		<maven.plugin.surefire.version>2.12</maven.plugin.surefire.version>
 		<maven.plugin.dependency.version>2.4</maven.plugin.dependency.version>
-		<maven.plugin.cargo.version>1.2.0</maven.plugin.cargo.version>
 
 		<compiler.version.source>1.6</compiler.version.source>
 		<compiler.version.target>1.6</compiler.version.target>
@@ -29,17 +28,9 @@
 		<commons.logging.version>1.1.1</commons.logging.version>
 		<commons.beanutils.version>1.8.3</commons.beanutils.version>
 
-		<spring.version>3.1.0.RELEASE</spring.version>
-		<mongo.version>2.7.3</mongo.version>
-		<cglib.version>2.2.2</cglib.version>
-		<jdom.version>1.1.3</jdom.version>
-		<jodatime.version>2.1</jodatime.version>
-
-		<jackson.version>1.9.5</jackson.version>
-		<google.guava.version>11.0.2</google.guava.version>
 		<junit.version>4.10</junit.version>
-		<xmlunit.version>1.3</xmlunit.version>
 		<mockito.version>1.9.0</mockito.version>
+		
 		<log4j.version>1.2.16</log4j.version>
 		<slf4j.version>1.6.4</slf4j.version>
 
@@ -50,69 +41,11 @@
 			<id>maven2-repository.dev.java.net</id>
 			<url>http://download.java.net/maven/2/</url>
 		</repository>
-		<repository>
-			<id>jboss</id>
-			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-		</repository>
 	</repositories>
 
 	<dependencies>
 
-		<!-- JACKSON DEPS -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-xc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.7.RC1</version>
-		</dependency>
-		<!-- NOSQL DRIVERS -->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongo-java-driver</artifactId>
-			<version>${mongo.version}</version>
-		</dependency>
-		<!-- JACKSON -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-xc</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
+	
 		<!-- COMMONS -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -160,11 +93,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${google.guava.version}</version>
-		</dependency>
 		<!-- TESTING -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -176,12 +104,6 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>xmlunit</groupId>
-			<artifactId>xmlunit</artifactId>
-			<version>${xmlunit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- LOGGING -->
