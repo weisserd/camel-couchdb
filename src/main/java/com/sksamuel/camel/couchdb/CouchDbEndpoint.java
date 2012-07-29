@@ -27,8 +27,8 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 	public static final String	HEADER_DOC_REV	= "CouchDbRev";
 
 	private static final String	URI_ERROR		= "Invalid URI. Format must be of the form couchdb:http[s]://hostname[:port]/database?[options...]";
-	private static final long	DEFAULT_HEARTBEAT	= 30000;
-	private static final int	DEFAULT_PORT	= 5984;
+	static final long			DEFAULT_HEARTBEAT	= 30000;
+	static final int			DEFAULT_PORT	= 5984;
 
 	private final String		protocol;
 
@@ -57,9 +57,9 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 		port = uri.getPort() == -1 ? DEFAULT_PORT : uri.getPort();
 
-		database = uri.getPath();
-		if (database == null)
+		if (uri.getPath() == null || uri.getPath().trim().length() == 0)
 			throw new CouchDbException(URI_ERROR);
+		database = uri.getPath().substring(1);
 
 		hostname = uri.getHost();
 		if (hostname == null)
@@ -95,41 +95,17 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return new CouchDbProducer(this, createClient());
 	}
 
-	public String getDatabase() {
-		return database;
-	}
-
 	public long getHeartbeart() {
 		return heartbeart;
-	}
-
-	public String getHostname() {
-		return hostname;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	public String getProtocol() {
-		return protocol;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public boolean isCreateDatabase() {
-		return createDatabase;
-	}
-
 	@Override
 	public boolean isSingleton() {
-		return false;
+		return true;
 	}
 
 	public void setCreateDatabase(boolean create) {
