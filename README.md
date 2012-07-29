@@ -9,7 +9,11 @@ The camel-couchdb component allows you to treat Apache CouchDB as a producer or 
 * Ability to have events trigger for only deletes, only inserts/updaes or all (default).
 * Headers set for sequenceId, document revision, document id, and HTTP method type.
 
+How to Use
+==========
 
+You can use couch as an endpoint with the following syntax. The endpoint syntax is the same for producer and consumer.
+`couchdb:http://hostname[:port]/database?[options...]`
 
 Tests
 =====
