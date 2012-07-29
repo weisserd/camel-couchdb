@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
  */
 public class CouchDbConsumer extends DefaultConsumer {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbConsumer.class);
+	private static final Logger		logger	= LoggerFactory.getLogger(CouchDbConsumer.class);
 
-	private final Processor		processor;
-	private final CouchDbClient	couchClient;
-	private final CouchDbEndpoint	endpoint;
-	private ExecutorService		executor;
+	private final Processor			processor;
+	private final CouchDbClient		couchClient;
+	private final CouchDbEndpoint		endpoint;
+	private ExecutorService			executor;
 	private CouchDbChangesetTracker	task;
 
 	public CouchDbConsumer(CouchDbEndpoint endpoint, CouchDbClient couchClient, Processor processor) {
@@ -32,6 +32,7 @@ public class CouchDbConsumer extends DefaultConsumer {
 	@Override
 	protected void doStart() throws Exception {
 		super.doStart();
+		logger.info("Starting CouchDB consumer");
 		executor = endpoint.getCamelContext().getExecutorServiceManager().newFixedThreadPool(this, endpoint.getEndpointUri(), 1);
 		task = new CouchDbChangesetTracker(endpoint, this, couchClient);
 		executor.submit(task);
@@ -40,6 +41,7 @@ public class CouchDbConsumer extends DefaultConsumer {
 	@Override
 	protected void doStop() throws Exception {
 		super.doStop();
+		logger.info("Stopping CouchDB consumer");
 		if (task != null) {
 			task.stop();
 		}
@@ -61,7 +63,7 @@ public class CouchDbConsumer extends DefaultConsumer {
 	public void suspend() throws Exception {
 		super.suspend();
 		// suspend can do a stop as couch is a stateless protocol. There is no overload to be saved by maintaining a
-		// "connection"
+		// "connection" as in other components where suspend and resume are used to avoid costly setups
 		doStop();
 	}
 }

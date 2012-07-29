@@ -50,16 +50,18 @@ public class CouchDbChangesetTracker implements Runnable {
 	public void run() {
 		while (changes.hasNext()) { // blocks until a feed is received
 
-			ChangesResult.Row feed = changes.next();
-			JsonObject doc = feed.getDoc();
-
 			try {
 
-				Exchange exchange = endpoint.createCouchExchange(doc);
-				logger.trace("Sending exchange: {}, _id: {}", exchange, doc.get("_id"));
+				ChangesResult.Row feed = changes.next();
+				String seq = feed.getSeq();
+				JsonObject doc = feed.getDoc();
+
+				Exchange exchange = endpoint.createCouchExchange(seq, feed.getId(), doc);
+				logger.trace("Created exchange [exchange={}, _id={}, seq={}", new Object[] { exchange, feed.getId(), seq });
 				consumer.getProcessor().process(exchange);
 
 			} catch (Exception e) {
+				logger.trace("Error={}", e);
 			}
 		}
 		stopped = true;

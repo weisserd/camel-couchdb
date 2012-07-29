@@ -19,7 +19,7 @@ public class CouchDbComponent extends DefaultComponent {
 	protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> params) throws Exception {
 		Endpoint e = new CouchDbEndpoint(uri, remaining, this);
 		setProperties(e, params);
-		logger.debug("Created CouchDB endpoint [{}]", e);
+		logger.info("Created CouchDB Endpoint [{}]", e);
 		return e;
 	}
 }

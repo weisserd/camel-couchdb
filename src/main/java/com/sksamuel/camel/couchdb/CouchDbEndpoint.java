@@ -21,26 +21,26 @@ import com.google.gson.JsonObject;
  */
 public class CouchDbEndpoint extends DefaultEndpoint {
 
-	public static final String	DATABASE		= "CouchDbDatabase";
-	public static final String	HOSTNAME		= "CouchDbHostname";
-	public static final String	ID			= "CouchDbId";
-	public static final String	REV			= "CouchDbRev";
+	public static final String	HEADER_DATABASE	= "CouchDbDatabase";
+	public static final String	HEADER_SEQ		= "CouchDbSeq";
+	public static final String	HEADER_DOC_ID	= "CouchDbId";
+	public static final String	HEADER_DOC_REV	= "CouchDbRev";
 
-	private static final int	DEFAULT_PORT	= 5984;
 	private static final String	URI_ERROR		= "Invalid URI. Format must be of the form couchdb:http[s]://hostname[:port]/database?[options...]";
 	private static final long	DEFAULT_HEARTBEAT	= 30000;
+	private static final int	DEFAULT_PORT	= 5984;
 
-	private String			protocol		= "http";
+	private final String		protocol;
 
 	private final String		hostname;
 
 	private String			username;
 
-	private String			database;
+	private final String		database;
 
 	private String			password;
 
-	private int				port;
+	private final int			port;
 
 	private long			heartbeart		= DEFAULT_HEARTBEAT;
 
@@ -55,9 +55,7 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		if (protocol == null)
 			throw new CouchDbException(URI_ERROR);
 
-		port = uri.getPort();
-		if (port == -1)
-			port = DEFAULT_PORT;
+		port = uri.getPort() == -1 ? DEFAULT_PORT : uri.getPort();
 
 		database = uri.getPath();
 		if (database == null)
@@ -77,14 +75,14 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return new CouchDbConsumer(this, createClient(), processor);
 	}
 
-	public Exchange createCouchExchange(JsonObject obj) {
-		Exchange exchange = new DefaultExchange(this.getCamelContext(), getExchangePattern());
+	public Exchange createCouchExchange(String seq, String id, JsonObject obj) {
+		Exchange exchange = new DefaultExchange(getCamelContext(), getExchangePattern());
 
 		Message message = new DefaultMessage();
-		message.setHeader(DATABASE, database);
-		message.setHeader(HOSTNAME, hostname);
-		message.setHeader(ID, obj.get("_id").getAsString());
-		message.setHeader(REV, obj.get("_rev").getAsString());
+		message.setHeader(HEADER_DATABASE, database);
+		message.setHeader(HEADER_SEQ, seq);
+		message.setHeader(HEADER_DOC_ID, id);
+		message.setHeader(HEADER_DOC_REV, obj.get("_rev").getAsString());
 
 		message.setBody(obj);
 		exchange.setIn(message);
@@ -138,24 +136,12 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		this.createDatabase = create;
 	}
 
-	public void setDatabase(String database) {
-		this.database = database;
-	}
-
 	public void setHeartbeart(long heartbeart) {
 		this.heartbeart = heartbeart;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
 	}
 
 	public void setUsername(String username) {

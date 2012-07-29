@@ -4,6 +4,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -12,6 +14,8 @@ import com.google.gson.Gson;
  * 
  */
 public class CouchDbProducer extends DefaultProducer {
+
+	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbProducer.class);
 
 	private final CouchDbEndpoint	endpoint;
 	private final CouchDbClient	couchClient;
@@ -25,14 +29,20 @@ public class CouchDbProducer extends DefaultProducer {
 	@Override
 	public void process(Exchange exchange) throws Exception {
 		try {
+
 			Object doc = exchange.getIn().getMandatoryBody();
 			if (doc instanceof String)
 				doc = new Gson().toJsonTree(doc);
+
 			Response save = couchClient.save(doc);
 			if (save == null)
-				throw new CouchDbException("Could not save document");
-			exchange.getIn().setHeader(CouchDbEndpoint.REV, save.getRev());
-			exchange.getIn().setHeader(CouchDbEndpoint.ID, save.getId());
+				throw new CouchDbException("Could not save document [unknown reason]");
+
+			logger.trace("Document saved [_id={}, _rev={}]", save.getId(), save.getRev());
+
+			exchange.getIn().setHeader(CouchDbEndpoint.HEADER_DOC_REV, save.getRev());
+			exchange.getIn().setHeader(CouchDbEndpoint.HEADER_DOC_ID, save.getId());
+
 		} catch (Exception e) {
 			throw new CouchDbException(e);
 		}
