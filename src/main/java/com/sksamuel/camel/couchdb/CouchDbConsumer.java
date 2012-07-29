@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutorService;
 
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.lightcouch.CouchDbClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +16,12 @@ public class CouchDbConsumer extends DefaultConsumer {
 	private static final Logger		logger	= LoggerFactory.getLogger(CouchDbConsumer.class);
 
 	private final Processor			processor;
-	private final CouchDbClient		couchClient;
+	private final CouchDbClientWrapper	couchClient;
 	private final CouchDbEndpoint		endpoint;
 	private ExecutorService			executor;
 	private CouchDbChangesetTracker	task;
 
-	public CouchDbConsumer(CouchDbEndpoint endpoint, CouchDbClient couchClient, Processor processor) {
+	public CouchDbConsumer(CouchDbEndpoint endpoint, CouchDbClientWrapper couchClient, Processor processor) {
 		super(endpoint, processor);
 		this.couchClient = couchClient;
 		this.endpoint = endpoint;

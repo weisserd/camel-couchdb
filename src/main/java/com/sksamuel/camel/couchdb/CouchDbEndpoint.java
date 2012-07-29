@@ -66,8 +66,8 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 			throw new CouchDbException(URI_ERROR);
 	}
 
-	CouchDbClient createClient() {
-		return new CouchDbClient(database, createDatabase, protocol, hostname, port, username, password);
+	CouchDbClientWrapper createClient() {
+		return new CouchDbClientWrapper(new CouchDbClient(database, createDatabase, protocol, hostname, port, username, password));
 	}
 
 	@Override

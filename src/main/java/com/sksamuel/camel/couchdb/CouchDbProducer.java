@@ -2,7 +2,6 @@ package com.sksamuel.camel.couchdb;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
-import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +14,12 @@ import com.google.gson.Gson;
  */
 public class CouchDbProducer extends DefaultProducer {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbProducer.class);
+	private static final Logger		logger	= LoggerFactory.getLogger(CouchDbProducer.class);
 
-	private final CouchDbEndpoint	endpoint;
-	private final CouchDbClient	couchClient;
+	private final CouchDbEndpoint		endpoint;
+	private final CouchDbClientWrapper	couchClient;
 
-	public CouchDbProducer(CouchDbEndpoint endpoint, CouchDbClient couchClient) {
+	public CouchDbProducer(CouchDbEndpoint endpoint, CouchDbClientWrapper couchClient) {
 		super(endpoint);
 		this.couchClient = couchClient;
 		this.endpoint = endpoint;

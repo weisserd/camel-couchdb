@@ -3,7 +3,6 @@ package com.sksamuel.camel.couchdb;
 import org.apache.camel.Exchange;
 import org.lightcouch.Changes;
 import org.lightcouch.ChangesResult;
-import org.lightcouch.CouchDbClient;
 import org.lightcouch.CouchDbInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +15,19 @@ import com.google.gson.JsonObject;
  */
 public class CouchDbChangesetTracker implements Runnable {
 
-	private static final Logger	logger	= LoggerFactory.getLogger(CouchDbChangesetTracker.class);
+	private static final Logger		logger	= LoggerFactory.getLogger(CouchDbChangesetTracker.class);
 
-	private volatile boolean	stopped;
+	private volatile boolean		stopped;
 
-	private final CouchDbClient	couchClient;
+	private final CouchDbClientWrapper	couchClient;
 
-	private Changes			changes;
+	private Changes				changes;
 
-	private final CouchDbEndpoint	endpoint;
+	private final CouchDbEndpoint		endpoint;
 
-	private final CouchDbConsumer	consumer;
+	private final CouchDbConsumer		consumer;
 
-	public CouchDbChangesetTracker(CouchDbEndpoint endpoint, CouchDbConsumer consumer, CouchDbClient couchClient) {
+	public CouchDbChangesetTracker(CouchDbEndpoint endpoint, CouchDbConsumer consumer, CouchDbClientWrapper couchClient) {
 		this.endpoint = endpoint;
 		this.consumer = consumer;
 		this.couchClient = couchClient;
