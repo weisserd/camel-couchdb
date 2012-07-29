@@ -1,6 +1,7 @@
 package com.sksamuel.camel.couchdb;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -43,6 +44,8 @@ public class CouchDbComponentTest {
 		params.put("password", "chrism");
 		params.put("heartbeat", 1000);
 		params.put("style", "gothic");
+		params.put("deletes", false);
+		params.put("updates", false);
 
 		String uri = "couchdb:http://localhost:14/db";
 		String remaining = "http://localhost:14/db";
@@ -55,6 +58,8 @@ public class CouchDbComponentTest {
 		assertEquals("gothic", endpoint.getStyle());
 		assertEquals("chrism", endpoint.getPassword());
 		assertTrue(endpoint.isCreateDatabase());
+		assertFalse(endpoint.isDeletes());
+		assertFalse(endpoint.isUpdates());
 		assertEquals(14, endpoint.getPort());
 		assertEquals(1000, endpoint.getHeartbeat());
 	}

@@ -6,3 +6,4 @@ target
 /.settings/org.eclipse.m2e.core.prefs
 /.settings/org.eclipse.wst.common.component
 /.settings/org.eclipse.wst.common.project.facet.core.xml
+/pom.xml.versionsBackup

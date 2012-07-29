@@ -21,11 +21,11 @@ public class CouchDbChangesetTracker implements Runnable {
 
 	private final CouchDbClientWrapper	couchClient;
 
-	private Changes				changes;
-
 	private final CouchDbEndpoint		endpoint;
 
 	private final CouchDbConsumer		consumer;
+
+	private Changes				changes;
 
 	public CouchDbChangesetTracker(CouchDbEndpoint endpoint, CouchDbConsumer consumer, CouchDbClientWrapper couchClient) {
 		this.endpoint = endpoint;
@@ -53,6 +53,10 @@ public class CouchDbChangesetTracker implements Runnable {
 			try {
 
 				ChangesResult.Row feed = changes.next();
+				if (feed.isDeleted() && !endpoint.isDeletes())
+					continue;
+				if (!feed.isDeleted() && !endpoint.isUpdates())
+					continue;
 				String seq = feed.getSeq();
 				JsonObject doc = feed.getDoc();
 

@@ -58,6 +58,10 @@ public class CouchDbChangesetTrackerTest {
 	@Before
 	public void before() {
 		initMocks(this);
+
+		when(endpoint.isDeletes()).thenReturn(true);
+		when(endpoint.isUpdates()).thenReturn(true);
+
 		when(client.context()).thenReturn(context);
 		when(context.info()).thenReturn(info);
 		when(info.getUpdateSeq()).thenReturn("100");

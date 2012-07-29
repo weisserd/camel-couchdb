@@ -50,6 +50,10 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	private boolean			createDatabase;
 
+	private boolean			deletes		= true;
+
+	private boolean			updates		= true;
+
 	public CouchDbEndpoint(String endpointUri, String remaining, CouchDbComponent component) throws URISyntaxException {
 		super(endpointUri, component);
 
@@ -135,13 +139,25 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 		return createDatabase;
 	}
 
+	public boolean isDeletes() {
+		return deletes;
+	}
+
 	@Override
 	public boolean isSingleton() {
 		return true;
 	}
 
+	public boolean isUpdates() {
+		return updates;
+	}
+
 	public void setCreateDatabase(boolean create) {
 		this.createDatabase = create;
+	}
+
+	public void setDeletes(boolean deletes) {
+		this.deletes = deletes;
 	}
 
 	public void setHeartbeat(long heartbeart) {
@@ -154,6 +170,10 @@ public class CouchDbEndpoint extends DefaultEndpoint {
 
 	public void setStyle(String style) {
 		this.style = style;
+	}
+
+	public void setUpdates(boolean updates) {
+		this.updates = updates;
 	}
 
 	public void setUsername(String username) {
