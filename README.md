@@ -6,7 +6,7 @@ The camel-couchdb component allows you to treat Apache CouchDB as a producer or 
 * As a consumer, monitors couch changesets for inserts, updates and deletes and publishes these as messages into camel routes.
 * As a producer, can save or update documents into couch.
 * Can support as many endpoints as required, eg for multiple databases across multiple instances.
-* Ability to have events trigger for only deletes, only inserts/updaes or all (default).
+* Ability to have events trigger for only deletes, only inserts/updates or all (default).
 * Headers set for sequenceId, document revision, document id, and HTTP method type.
 
 How to Use
